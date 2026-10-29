@@ -1,0 +1,9 @@
+{
+  "product": "Demo Target",
+  "resource": "demo_target",
+  "dependencies": [
+    {"name": "demo_missing"},
+    {"name": "demo_stopped"},
+    {"name": "demo_old", "supportedVersions": ["2.0.0"]}
+  ]
+}
