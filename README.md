@@ -1,23 +1,23 @@
-# FiveM Support Kit — τεχνικό demo 0.1.0
+# FiveM Support Kit — technical demo 0.1.0
 
-Πρωτότυπο για πωλητές FiveM scripts: έλεγχος συγκεκριμένων απαιτήσεων και οργανωμένη αναφορά για ticket. Δεν είναι έτοιμο εμπορικό προϊόν ούτε αυτόματο εργαλείο επισκευής.
+A prototype for FiveM script sellers that checks declared requirements and produces an organized report for support tickets. It is not a finished commercial product or an automatic repair tool.
 
-## Γρήγορη δοκιμή χωρίς FiveM
+## Quick test without FiveM
 
-Με Node.js 18 ή νεότερο, από αυτόν τον φάκελο:
+With Node.js 18 or later, run from this directory:
 
 ```sh
 node test.js
 ```
 
-Εκτελεί tests με προσομοιωμένα FiveM APIs και δημιουργεί το `sample-report.txt`. Τα αποτελέσματα είναι συνθετικά, όχι μέτρηση πραγματικού server.
+The tests use simulated FiveM APIs and generate `sample-report.txt`. Results are synthetic, not measurements from a real server.
 
-## Εγκατάσταση σε δοκιμαστικό FiveM server
+## Install on a test FiveM server
 
-1. Αντιγράψτε τον φάκελο `support_kit` στο `resources/[local]/`.
-2. Αντιγράψτε τους τρεις φακέλους μέσα στο `fixtures` στο ίδιο `[local]`.
-3. Μην δημιουργήσετε resource `demo_missing`.
-4. Στην κονσόλα του server εκτελέστε διαδοχικά:
+1. Copy the `support_kit` folder into `resources/[local]/`.
+2. Copy the three folders inside `fixtures` into the same `[local]` folder.
+3. Do not create a `demo_missing` resource.
+4. Run these commands in order in the server console:
 
 ```text
 refresh
@@ -28,34 +28,34 @@ stop demo_stopped
 supportcheck
 ```
 
-Το `demo_stopped` πρέπει να είναι εγκατεστημένο αλλά σταματημένο. Μην κάνετε `ensure [local]` μετά το `stop`, επειδή θα το ξεκινήσει. Το demo δεν απαιτεί QBCore, ESX ή database.
+`demo_stopped` must be installed but stopped. Do not run `ensure [local]` after stopping it, as that would start it again. The demo does not require QBCore, ESX, or a database.
 
-Αναμένονται MISSING για demo_missing, NOT_STARTED για demo_stopped και UNSUPPORTED_VERSION για demo_old (δηλώνει 1.0.0 αντί για την απαιτούμενη 2.0.0).
+Expected results: MISSING for demo_missing, NOT_STARTED for demo_stopped, and UNSUPPORTED_VERSION for demo_old (which declares 1.0.0 instead of the required 2.0.0).
 
-Η εντολή εκτελείται μόνο από server console/RCON ή άλλον έμπιστο server resource, όχι από παίκτες. Η αναφορά εμφανίζεται μόνο στην κονσόλα. Δεν αποστέλλεται αυτόματα στο Discord.
+The command can only be executed from the server console/RCON or another trusted server resource, not by players. The report appears only in the console; it is not automatically sent to Discord.
 
-## Ρύθμιση για άλλο προϊόν
+## Configure for another product
 
-Επεξεργαστείτε το `support_kit/requirements.json`: product, resource και λίστα dependencies. Το προαιρετικό `supportedVersions` είναι αυστηρή λίστα ακριβών strings, όχι εύρος semver. Την ορίζει ο πωλητής βάσει των δικών του δοκιμών. Απουσία version metadata δίνει UNKNOWN_VERSION, όχι επιβεβαιωμένη ασυμβατότητα. Μετά τη ρύθμιση, εκτελέστε ξανά `supportcheck`.
+Edit `support_kit/requirements.json`: product, resource, and dependencies. The optional `supportedVersions` field is a strict list of exact strings, not a semver range. The seller defines it based on their own tests. Missing version metadata yields UNKNOWN_VERSION, not confirmed incompatibility. After configuration, run `supportcheck` again.
 
-## Όρια και δεδομένα
+## Scope and data
 
-- Διαβάζει μόνο κατάσταση και version metadata των δηλωμένων resources, μαζί με το δικό του JSON.
-- Δεν διαβάζει server.cfg, credentials, logs, player identifiers ή βάση δεδομένων.
-- Δεν αλλάζει αρχεία, δεν ξεκινά/stops resources και δεν κάνει εξωτερικά requests.
-- Ελέγξτε ονόματα/metadata πριν κοινοποιήσετε την αναφορά. Δεν υπάρχει γενικός scrubber για αυθαίρετα δεδομένα που προσθέτει ένας developer στα metadata.
-- MISSING σημαίνει μη καταχωρισμένο resource στο runtime: μπορεί να χρειάζεται refresh ή σωστό όνομα, όχι απαραίτητα download.
-- Δεν ελέγχει SQL, exports, escrow, gameplay, performance, κρυφές dependencies, providers/aliases ή πλήρη συμβατότητα framework.
-- OK σημαίνει μόνο ότι πέρασαν οι συγκεκριμένοι δηλωμένοι έλεγχοι τη στιγμή εκτέλεσης.
-- Η κατάσταση του target εμφανίζεται στην κεφαλίδα· δεν συμπεραίνει αν λειτουργεί σωστά στο παιχνίδι.
+- Reads only the state and version metadata of declared resources, plus its own JSON.
+- Does not read server.cfg, credentials, logs, player identifiers, or the database.
+- Does not modify files, start or stop resources, or make external requests.
+- Review names and metadata before sharing the report. There is no general scrubber for arbitrary data added by a developer to metadata.
+- MISSING means a resource is not registered at runtime: a refresh or a corrected name may be needed; it does not necessarily mean a download is required.
+- Does not check SQL, exports, escrow, gameplay, performance, hidden dependencies, providers/aliases, or complete framework compatibility.
+- OK means only that the specified declared checks passed at the time of execution.
+- The target's state appears in the header; this does not determine whether it works correctly in-game.
 
-## Επαλήθευση και επόμενο κριτήριο
+## Validation and next steps
 
-Ο έλεγχος λογικής και ο adapter έχουν δοκιμαστεί τοπικά με mocks. Δεν έχει πραγματοποιηθεί δοκιμή μέσα σε FXServer ή GTA/FiveM client. Πριν από πραγματική διάθεση χρειάζονται δοκιμές σε server, αξιολόγηση ευχρηστίας από πωλητές και απόδειξη προθυμίας πληρωμής. Δεν υπάρχει υπόσχεση μείωσης tickets ή επιβεβαιωμένη τιμή πώλησης.
+The checking logic and adapter have been tested locally with mocks. No test has been performed in FXServer or a GTA/FiveM client. Before a real release, the prototype needs server testing, usability evaluation by sellers, and evidence of willingness to pay. No reduction in tickets or selling price has been established.
 
-Προτεινόμενο πείραμα: 3 πωλητές να ρυθμίσουν μόνοι τους ένα προϊόν, να αξιολογήσουν την αναφορά και να δηλώσουν αν θα πλήρωναν. Αν όλοι απαιτούν custom integration, η ιδέα δεν ταιριάζει στον στόχο ελάχιστης επικοινωνίας.
+Suggested experiment: ask three sellers to configure a product themselves, evaluate the report, and say whether they would pay for it. If all require custom integration, the idea may not fit the goal of minimal communication.
 
-## Πηγές API
+## API references
 
 - https://docs.fivem.net/docs/scripting-reference/resource-manifest/
 - https://docs.fivem.net/natives/?_0x4039B485
