@@ -1,0 +1,13 @@
+SUPPORT KIT 0.1.0 — diagnostic snapshot
+Product: Demo Target
+Target: demo_target | state=started | version=1.0.0
+Scope: resource state and seller-declared version rules only.
+[MISSING] demo_missing | state=missing | version=unknown
+  Next: Resource is not registered. Check installation, folder name and refresh; then rerun.
+[NOT_STARTED] demo_stopped | state=stopped | version=1.0.0
+  Next: Resource is not running. Inspect its first startup error before retrying.
+[UNSUPPORTED_VERSION] demo_old | state=started | version=1.0.0
+  Next: Reported version is outside the seller-declared list: 2.0.0. Confirm the supported package before changing versions.
+Manual review: SQL, framework configuration, exports, escrow entitlement and gameplay are not checked.
+Before sharing: review resource names and version metadata. No credentials, player data or raw logs are collected.
+Ticket details to add: expected result / actual result / reproduction steps / first relevant error (redacted).
