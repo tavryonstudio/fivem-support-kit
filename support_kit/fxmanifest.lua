@@ -1,0 +1,6 @@
+fx_version 'cerulean'
+game 'gta5'
+server_only 'yes'
+author 'Support Kit prototype'
+version '0.1.0'
+server_script 'server.js'
